@@ -1,0 +1,28 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 10 Feb, 2016, 8:34:22 PM
+    Author     : arsh
+*/
+
+.red{
+     border-left: 15px solid red;    
+}
+
+.green{
+     border-left: 15px solid green;
+     order-right: 5px solid #f00;
+    
+}
+.yellow{
+     border-left: 15px solid yellow;    
+}
+.black{
+     border-left: 15px solid black;    
+}
+.white{
+     border-left: 15px solid white;    
+}
