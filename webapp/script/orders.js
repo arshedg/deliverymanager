@@ -25,12 +25,16 @@ function onDocumentReady(){
     
 }
 function saveUserDetails(){
+    var res = confirm("Are you sure?");
+    if(res==false){
+        return;
+    }
     var name = $("#name").val();
     var address =  $("#address").val();
     var url="api/updateuser?number="+activeOrder.user.number+"&name="+name+"&address="+address;
     $.ajax({
         beforeSend: function () {
-        $.mobile.loading('show');
+            $.mobile.loading('show');
         }, //Show spinner
                 complete: function () {
                     $.mobile.loading('hide');
@@ -155,6 +159,7 @@ function setDetails(id){
     $("#address").val(order.user.address);
     $("#number").attr("href","tel:"+order.user.number);
     $("#number").text(order.user.number);
+    $("#credit").val(order.user.credit);
     var orderList = order.orders;
     generateOrderTable(orderList);
 }
@@ -175,10 +180,12 @@ function generateOrderTable(orderList){
      
 }
 function generateRow(order){
+    var timing = order.immediate==true?"Immediate":"booking";
     return "<tr>"+
     "<td>"+order.product+"</td>"+
     "<td>"+order.quantity+"</td>"+
     "<td>"+order.orderedTime+"</td>"+
+    "<td>"+timing+"</td>"+
     "</tr>";
 }
 

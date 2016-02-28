@@ -14,9 +14,9 @@
  <mvc:annotation-driven />
  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/fishcart"/>
+        <property name="url" value="jdbc:mysql://node14186-butler.ind-cloud.everdata.com/fishcart"/>
         <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value="PQLmoq15945"/>
         <!--!
         jdbc:mysql://103.10.235.203:3306/fishcart
         jdbc:mysql://localhost:3306/fishcart

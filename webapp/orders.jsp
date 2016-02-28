@@ -24,6 +24,7 @@
             $("body").ready(onDocumentReady);
         </script>
         <div data-role="page" id="main">
+         
             <div data-role="content" >
                 <ul id="orderList" data-role="listview"  data-inset="true">
                         
@@ -31,6 +32,9 @@
             </div>
         </div>
         <div data-role="page" id="details">
+               <div data-role="header" id="mainHeader" >
+               <a href="#" data-icon="gear" class="ui-btn-right" onclick="saveUserDetails()">Save</a>
+            </div>  
             <div data-role="content" >
                 <input type='text' id='name'/>
                 <br/>
@@ -39,7 +43,7 @@
                 <textarea row="5" type='text' id='address'></textarea>
                 <br/>
                 
-                <input type="submit" value="SAVE" onclick="saveUserDetails()" />
+           
                 <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                     <input   type="radio" name="status" id="todo" value="on" checked="checked">
                     <label id="lNow" for="todo">TODO</label>
@@ -53,13 +57,19 @@
                     <label id="lLater"for="fake">FAKE</label>
 
                 </fieldset>
+                
+                 <div data-role="fieldcontain">
+                    <label  for="credit">Credit RS:</label>
+                    <input type='text' id='credit'/>
+                 </div>
                 <table id="orderTable" data-role="table" class="ui-responsive">
                     <thead>
                         <tr>
                             <th>Product</th>
                             <th>Quantity</th>
-
-                            <th>time</th
+                            <th>Time</th>
+                            <th>Expected delivery</th>
+                      
                         </tr>
                     </thead>
                     <tbody id="tbody">
