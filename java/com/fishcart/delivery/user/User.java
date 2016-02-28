@@ -13,7 +13,7 @@ public class User {
     private String name="empty name";
     private String number;
     private String address;
-
+    private Float credit;
     /**
      * @return the name
      */
@@ -60,5 +60,19 @@ public class User {
     }
     public boolean equals(User other){
         return this.number.trim().equals(other.getNumber().trim());
+    }
+
+    /**
+     * @return the credit
+     */
+    public Float getCredit() {
+        return credit;
+    }
+
+    /**
+     * @param credit the credit to set
+     */
+    public void setCredit(Float credit) {
+        this.credit = credit;
     }
 }

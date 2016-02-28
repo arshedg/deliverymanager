@@ -11,7 +11,11 @@ import com.fishcart.delivery.util.Util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
@@ -25,8 +29,17 @@ public class OrderDao  extends SimpleJdbcDaoSupport{
     @Autowired
     ReferralDao referralDao;
     public List<Order> getRecentOrders(){
-        String sql = "select o.id, o.number,o.status,o.product, o.quantity, o.immediate,o.stamp as time from orders o where DATE(stamp) >'2016-2-10' order by time desc";
-        return this.getJdbcTemplate().query(sql, OrderRowMapper.getInstance() );
+        String date = get3DaysBack();
+        String sql = "select o.id, o.number,o.status,o.product, o.quantity, o.immediate,o.stamp as time from orders o where DATE(stamp) >='"+date+"' order by time desc";
+        return this.getJdbcTemplate().query(sql,  OrderRowMapper.getInstance() );
+    }
+    private String get3DaysBack(){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -3);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+        return df.format(cal.getTime());
+
     }
     public String getNumberFromOrderId(String id){
         String normalizedId = id.trim();

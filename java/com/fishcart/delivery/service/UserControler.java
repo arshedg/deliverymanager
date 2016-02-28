@@ -27,6 +27,9 @@ public class UserControler {
     @RequestMapping("/updateuser")
     public String updateUser(HttpServletRequest request,HttpServletResponse response,@RequestParam(value="name") String name,@RequestParam(value="address") String address,
                                 @RequestParam(value="number") String number) throws IOException, ServletException{
+        if(name.trim().equals("")||address.trim().equals("")){
+            return "Name or Address cannot be empty. failed";
+        }
         userDao.updateUser(name, address, number);
         return "User details saved";
     }

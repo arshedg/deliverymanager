@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
  */
 public class UserDao extends SimpleJdbcDaoSupport{
     public User getUserDetails(String number){
-        String sql="select name,number,address from user where number=?";
+        String sql="select name,number,address,credit from user where number=?";
         List<User> users = this.getJdbcTemplate().query(sql,new Object[]{number}, new RowMapper() {
 
             @Override
@@ -29,12 +29,14 @@ public class UserDao extends SimpleJdbcDaoSupport{
                 user.setName(rs.getString("name"));
                 user.setNumber(rs.getString("number"));
                 user.setAddress(rs.getString("address"));
+                user.setCredit(rs.getFloat("credit"));
                 return user;
             }
         });
         return getBetterUserObject(users);
     }
     public void updateUser(String name,String address,String number){
+        
         this.getSimpleJdbcTemplate().update("update user set name=?,address=? where number=?", name,address,number);
     }
      public void addCredit(String number,float amount){
