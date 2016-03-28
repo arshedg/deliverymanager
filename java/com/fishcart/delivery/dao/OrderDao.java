@@ -30,7 +30,7 @@ public class OrderDao  extends SimpleJdbcDaoSupport{
     ReferralDao referralDao;
     public List<Order> getRecentOrders(){
         String date = get3DaysBack();
-        String sql = "select o.id, o.number,o.status,o.product, o.quantity, o.immediate,o.stamp as time from orders o where DATE(stamp) >='"+date+"' order by time desc";
+        String sql = "select o.id, o.number,o.status,o.product, o.quantity,o.delivery_person ,o.immediate,o.stamp as time from orders o where DATE(stamp) >='"+date+"' order by time desc";
         return this.getJdbcTemplate().query(sql,  OrderRowMapper.getInstance() );
     }
     private String get3DaysBack(){
@@ -94,6 +94,15 @@ public class OrderDao  extends SimpleJdbcDaoSupport{
              return OrderStatus.TODO; 
         }
     }
+
+    public boolean setDeliverer(String ids, String guy) {
+        String idArray[] = ids.split(",");
+        String queryParams = getQueryParams(idArray.length);
+        String sql = "update orders set delivery_person=? where id in ("+queryParams+")";
+        String params[] = prefixStringToArray(guy, idArray);
+        this.getJdbcTemplate().update(sql, params);
+        return true;
+    }
 }
 class OrderRowMapper implements RowMapper{
 
@@ -108,6 +117,7 @@ class OrderRowMapper implements RowMapper{
                 order.setNumber(rs.getString("number"));
                 order.setProduct(rs.getString("product"));
                 order.setQuantity(rs.getFloat("quantity"));
+                order.setDeliveryPerson(rs.getString("delivery_person"));
                 Timestamp time = rs.getTimestamp("time");
                 order.setOrderedTime(Util.getIndianTime(time));
                 order.setImmediate(rs.getBoolean("immediate"));

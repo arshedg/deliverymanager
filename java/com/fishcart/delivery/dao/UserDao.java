@@ -49,7 +49,7 @@ public class UserDao extends SimpleJdbcDaoSupport{
         
     }
     public float getCredits(String number){
-        String query = "select credit from user where number=?";
+        String query = "select max(credit) from user where number=?";
         long price = this.getSimpleJdbcTemplate().queryForLong(query, number);
         return price;
     }

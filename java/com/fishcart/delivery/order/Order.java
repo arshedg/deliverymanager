@@ -20,6 +20,7 @@ public class Order {
     private boolean immediate;
     private String orderedTime;
     private String number;
+    private String deliveryPerson;
     /**
      * @return the product
      */
@@ -131,5 +132,19 @@ public class Order {
      */
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    /**
+     * @return the deliveryPerson
+     */
+    public String getDeliveryPerson() {
+        return deliveryPerson;
+    }
+
+    /**
+     * @param deliveryPerson the deliveryPerson to set
+     */
+    public void setDeliveryPerson(String deliveryPerson) {
+        this.deliveryPerson = deliveryPerson;
     }
 }

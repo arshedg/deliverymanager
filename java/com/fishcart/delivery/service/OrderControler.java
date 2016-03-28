@@ -29,9 +29,15 @@ public class OrderControler {
         return detailsGenerator.getRecentOrders();
     }
     @RequestMapping("/changestatus")
-    public String saveStatus(@RequestParam(value="orderid") String orderid,
+    public String saveStatus(@RequestParam(value="orderid") String orderids,
                                   @RequestParam(value="status") String status){
-        orderDao.setStatus(orderid, status);
+        orderDao.setStatus(orderids, status);
+        return "saved";
+    }
+    @RequestMapping("/deliveryPerson")
+    public String saveDeliveryGuy(@RequestParam(value="orderid") String orderid,
+                                  @RequestParam(value="guy") String guy){
+        orderDao.setDeliverer(orderid, guy);
         return "saved";
     }
     
