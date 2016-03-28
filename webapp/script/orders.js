@@ -10,6 +10,10 @@ function onDocumentReady(){
     $("input[name='status']").bind("change", function (event, ui) {
         setStatus(event, ui);
     });
+     
+    $("#guy").bind( "change", function(event, ui) {
+        setDeliveryGuy(event, ui);
+    });
     $(document).on("pagechange", function (e, data) {
     var pageid = data.toPage[0].id;
         if(pageid=="main"){
@@ -17,6 +21,7 @@ function onDocumentReady(){
         }
         if(pageid=="details"){
             $("#orderTable").table("refresh");
+            $("#guy").selectmenu("refresh");
             selectStatus(getStatusFromList(activeOrder.orders));
         }
     });
@@ -82,6 +87,28 @@ function setStatus(event ,ui){
         ,
                 success: function (response) {
                     propogateStatus(activeOrder.orders,statusValue);
+                    alert(response);
+                },
+        });
+}
+function setDeliveryGuy(event ,ui){
+    var statusValue = event.target.selectedOptions[0].value;
+    var ids = getAllOrderIds(activeOrder);
+    var url = "api/deliveryPerson?orderid="+ids+"&guy="+statusValue;
+        $.ajax({
+        beforeSend: function () {
+        $.mobile.loading('show');
+        }, //Show spinner
+                complete: function () {
+                    $.mobile.loading('hide');
+                }, //Hide spinner
+                url: url,
+                error: function (e) {
+                    alert("status change failed");
+                        // handeNetworkError();
+                }
+        ,
+                success: function (response) {
                     alert(response);
                 },
         });
@@ -160,6 +187,11 @@ function setDetails(id){
     $("#number").attr("href","tel:"+order.user.number);
     $("#number").text(order.user.number);
     $("#credit").val(order.user.credit);
+    var deliveryPerson = order.orders[0].deliveryPerson;
+    if(deliveryPerson==null){
+       deliveryPerson="none"; 
+    }
+    $("#guy").val(deliveryPerson);
     var orderList = order.orders;
     generateOrderTable(orderList);
 }

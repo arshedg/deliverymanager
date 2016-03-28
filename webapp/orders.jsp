@@ -32,8 +32,8 @@
             </div>
         </div>
         <div data-role="page" id="details">
-               <div data-role="header" id="mainHeader" >
-               <a href="#" data-icon="gear" class="ui-btn-right" onclick="saveUserDetails()">Save</a>
+            <div data-role="header" id="mainHeader" >
+                <a href="#" data-icon="gear" class="ui-btn-right" onclick="saveUserDetails()">Save</a>
             </div>  
             <div data-role="content" >
                 <input type='text' id='name'/>
@@ -76,6 +76,18 @@
 
                     </tbody>
                 </table>
+                <div data-role="fieldcontain">
+                    <label for="guy" class="select">Shipping method:</label>
+                    <select name="guy" id="guy">
+                        <option value="none">-----</option>
+                       <option value="asil">Asil</option>
+                       <option value="siraj">Siraj</option>
+                       <option value="vaishakh">Vaishakh</option>
+                       <option value="nisar">Nisar</option>
+                        <option value="sabith">Sabith</option>
+                        <option value="shaheer">Shaheer</option>
+                    </select>
+                 </div>
             </div>
         </div>
     </body>
