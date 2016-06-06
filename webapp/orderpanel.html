@@ -1,0 +1,33 @@
+<div data-role="panel" id="editOrder" data-theme="b"
+     data-display="overlay" data-position="right" style="width: 100%;">
+    <div data-role="header" >
+
+        Edit Order
+    </div>
+    <div id="editOrderContent" data-role="content">
+        <form class="ui-filterable">
+            <input id="productName" data-type="search" placeholder="Search products">
+        </form>    
+        <ul id="productNameList" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-input="#productName">
+
+        </ul>
+        <input id='productQuanity' type='number' value=''></input>
+        <label>
+            <input type="radio" name="timing" id="now">Immediate
+        </label>
+        <label for="later">Booking</label>
+        <input type="radio" name="timing" id="later" class="custom"> 
+
+        <form class="ui-filterable">
+                <input id="productStatus" data-type="search" placeholder="stauts...">
+        </form>    
+        <ul data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-input="#productStatus">
+            <li onclick="autoCompleteOnSelect(this, 'productStatus')">TODO</li>
+            <li onclick="autoCompleteOnSelect(this, 'productStatus')">CONFIRMED</li>
+            <li onclick="autoCompleteOnSelect(this, 'productStatus')">DELIVERED</li>
+            <li onclick="autoCompleteOnSelect(this, 'productStatus')">CANCELED</li>
+        </ul>
+    </div>
+    <input id="orderButton" type="submit" value="SAVE" onclick="orderEditRequest()">
+    <input id="orderButton" type="submit" value="CLOSE" onclick="closePanel('editOrder')">
+</div>

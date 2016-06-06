@@ -20,8 +20,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
  */
 public class UserDao extends SimpleJdbcDaoSupport{
     public User getUserDetails(String number){
+        Long lNumber = Long.valueOf(number);
         String sql="select name,number,address,credit from user where number=?";
-        List<User> users = this.getJdbcTemplate().query(sql,new Object[]{number}, new RowMapper() {
+        List<User> users = this.getJdbcTemplate().query(sql,new Object[]{lNumber}, new RowMapper() {
 
             @Override
             public Object mapRow(ResultSet rs, int i) throws SQLException {
@@ -76,6 +77,9 @@ public class UserDao extends SimpleJdbcDaoSupport{
             if(!StringUtils.isEmptyOrWhitespaceOnly(user.getAddress())){
                 return user;
             }
+        }
+        if(users.isEmpty()){
+            return null;
         }
         return users.get(0);
     }

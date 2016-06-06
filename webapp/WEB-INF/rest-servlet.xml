@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
- xmlns:context="http://www.springframework.org/schema/context"
- xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xmlns:p="http://www.springframework.org/schema/p"
- xsi:schemaLocation="
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
- <context:component-scan base-package="com.fishcart" />
- <mvc:annotation-driven />
- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <context:component-scan base-package="com.fishcart" />
+    <mvc:annotation-driven />
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://node14186-butler.ind-cloud.everdata.com/fishcart"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/fishcart?useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Kolkata"/>
         <property name="username" value="root"/>
-        <property name="password" value="PQLmoq15945"/>
+        <property name="password" value="root"/>
         <!--!
         jdbc:mysql://103.10.235.203:3306/fishcart
         jdbc:mysql://localhost:3306/fishcart
@@ -24,15 +24,43 @@
         PQLmoq15945
         -->
         
-  </bean>
-   <bean id="userDao" class="com.fishcart.delivery.dao.UserDao">
-      <property name="dataSource" ref="dataSource"/>
-   </bean>
-   <bean id="orderDao" class="com.fishcart.delivery.dao.OrderDao">
-      <property name="dataSource" ref="dataSource"/>
-   </bean>
+    </bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonMessageConverter" />
+                <ref bean="byteArrayMessageConverter"/>
+                <ref bean="stringMessageConverter"/>
+            </list>
+        </property>
+
+    </bean>
+
+    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >
+        <property name="supportedMediaTypes" value="application/json" />
+    </bean>
+
+    <bean id="byteArrayMessageConverter"
+      class="org.springframework.http.converter.ByteArrayHttpMessageConverter" >
+        <property name="supportedMediaTypes" value="application/octet-stream" />
+    </bean>
+
+    <bean id="stringMessageConverter"
+      class="org.springframework.http.converter.StringHttpMessageConverter" >
+        <property name="supportedMediaTypes" value="text/plain" />
+    </bean>
+    <bean id="userDao" class="com.fishcart.delivery.dao.UserDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="orderDao" class="com.fishcart.delivery.dao.OrderDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
    
-   <bean id="referralDao" class="com.fishcart.delivery.dao.ReferralDao">
-      <property name="dataSource" ref="dataSource"/>
-   </bean>
+    <bean id="referralDao" class="com.fishcart.delivery.dao.ReferralDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+   
+    <bean id="productDao" class="com.fishcart.delivery.dao.ProductDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 </beans>

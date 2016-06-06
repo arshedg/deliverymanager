@@ -5,14 +5,15 @@
  */
 package com.fishcart.delivery.order;
 
+import com.fishcart.delivery.util.Util;
 import java.sql.Time;
 
 /**
  *
  * @author arsh
  */
-public class Order {
-    private int orderId;
+public class Order implements Comparable{
+    private Integer orderId;
     private String product;
     private float  price;
     private float quantity;
@@ -123,7 +124,7 @@ public class Order {
     /**
      * @return the orderId
      */
-    public int getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
@@ -146,5 +147,11 @@ public class Order {
      */
     public void setDeliveryPerson(String deliveryPerson) {
         this.deliveryPerson = deliveryPerson;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Order other = (Order)o;
+        return this.getOrderId()>other.getOrderId()?1:-1;
     }
 }

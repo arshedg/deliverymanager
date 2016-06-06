@@ -7,6 +7,7 @@ package com.fishcart.delivery.dao;
 
 import com.fishcart.delivery.order.Order;
 import com.fishcart.delivery.order.OrderStatus;
+import com.fishcart.delivery.order.legacy.OrderDetails;
 import com.fishcart.delivery.util.Util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,12 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,7 +39,36 @@ public class OrderDao  extends SimpleJdbcDaoSupport{
         String sql = "select o.id, o.number,o.status,o.product, o.quantity,o.delivery_person ,o.immediate,o.stamp as time from orders o where DATE(stamp) >='"+date+"' order by time desc";
         return this.getJdbcTemplate().query(sql,  OrderRowMapper.getInstance() );
     }
-    private String get3DaysBack(){
+    public List<Order> getOrderHistory(String date){
+        List<Order> orders = getAllImmediateOrders(date);
+        orders.addAll(getPrevsDayBooking(date));
+        Collections.sort(orders);
+        return orders;
+    }
+    private List<Order> getAllImmediateOrders(String date){
+        String sqlDate = Util.getSqlDate(Util.getDate(date, "00:00"));
+        String sql = "select o.id, o.number,o.status,o.product, o.quantity,o.delivery_person ,o.immediate,o.stamp as time from orders o where DATE(stamp) ='"+sqlDate+"' and immediate=true and status='DELIVERED' order by time desc";
+        return  this.getJdbcTemplate().query(sql,  OrderRowMapper.getInstance() );
+
+    }
+    private List<Order> getPrevsDayBooking(String date){
+        Calendar givenDate = Calendar.getInstance();
+        givenDate.setTime(Util.getDate(date,"08:00"));
+        Timestamp givenDateStamp = new Timestamp(givenDate.getTime().getTime());
+        String prevsDate = Util.previousDate(givenDate.getTime());
+        Date prevsDateWithTime = Util.getDate(prevsDate, "08:00");
+        givenDate.setTime(prevsDateWithTime);
+        Timestamp prevsDayStamp = new Timestamp(givenDate.getTime().getTime());
+        String sql = "select o.id, o.number,o.status,o.product, o.quantity,o.delivery_person ,o.immediate,o.stamp as time from orders o where (stamp between ? and ?) and immediate=false and status='DELIVERED' order by time desc";
+        return this.getJdbcTemplate().query(sql,new Object[]{prevsDayStamp,givenDateStamp},  OrderRowMapper.getInstance() );
+        
+    }
+    /*sqlDate
+    1. all immediate orders of given day
+   
+    w. All orders from prevsday 06- current day 06
+    */
+   private String get3DaysBack(){
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -3);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -48,6 +83,57 @@ public class OrderDao  extends SimpleJdbcDaoSupport{
         }catch(Throwable e){
             return null;
         }
+    }
+ public void updateFeedBack(String number, String feedback) {
+        String sql = "update orders set feedback=? where number=? and status='TODO'";
+        this.getSimpleJdbcTemplate().update(sql, feedback, number);
+    }
+    public int saveOrder(Order order){
+        String sql = "";
+        if(order.getOrderId()!=null){
+            sql = "update orders set product=?,quantity=?,status=?,immediate=? where id=?";
+        }
+        return this.getSimpleJdbcTemplate().update(sql, order.getProduct(),order.getQuantity(),order.getOrderStatus().name(),order.isImmediate(),order.getOrderId());
+    }
+    public List<OrderDetails> getPendingOrders() {
+        String sql = "select name, o.number, address, o.feedback,o.product, o.quantity, o.immediate,o.stamp as time from orders o,(select name,address,number from user)as y where o.number = y.number and o.id>1500 order by time desc";
+        //return this.getJdbcTemplate().queryForList(sql, OrderDetails.class);
+        
+        return this.getJdbcTemplate().query(sql, new RowMapper() {
+
+            public Object mapRow(ResultSet rs, int i) throws SQLException {
+                OrderDetails details = new OrderDetails();
+                details.setName(rs.getString("name"));
+                details.setNumber(rs.getString("number"));
+                details.setAddress(rs.getString("address"));
+                details.setProduct(rs.getString("product"));
+                details.setQuantity(rs.getString("quantity"));
+                Timestamp time = rs.getTimestamp("time");
+                details.setTime(Util.getIndianTime(time));
+                details.setFeedback(rs.getString("feedback"));
+                details.setImmediate(rs.getBoolean("immediate"));
+                return details;
+            }
+        });
+    }
+
+    public Long getLastOrderId() {
+        String query = "select MAX(id) from orders";
+        return this.getSimpleJdbcTemplate().queryForObject(query, Long.class);
+    }
+
+    public Collection<OrderDetails> getPendingOrdersGroupedByCustomer() {
+        List<OrderDetails> orders = this.getPendingOrders();
+        Map<String, OrderDetails> groupedOrder = new HashMap<>();
+        orders.stream().forEach(order -> {
+            if (groupedOrder.containsKey(order.getNumber())) {
+                OrderDetails details = groupedOrder.get(order.getNumber());
+                details.setProduct(details.getProduct() + "," + order.getProduct());
+            } else {
+                groupedOrder.put(order.getNumber(), order);
+            }
+        });
+        return groupedOrder.values();
     }
     
     public boolean setStatus(String ids,String status){

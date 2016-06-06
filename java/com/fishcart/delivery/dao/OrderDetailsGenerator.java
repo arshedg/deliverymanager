@@ -41,6 +41,19 @@ public class OrderDetailsGenerator {
         }
        return orderDetailsList;
     } 
+    public String getOrderHistory(String date){
+        List<Order> report = orderDao.getOrderHistory(date);
+        StringBuilder builder = new StringBuilder();
+        builder.append("name,item,quantity,time\n");
+        for(Order order:report){
+            String name = userDao.getName(order.getNumber());
+            builder.append(name+",");
+            builder.append(order.getProduct()+",");
+            builder.append(order.getQuantity()+",");
+            builder.append(order.getOrderedTime()+"\n");
+        }
+        return builder.toString();
+    }
     private boolean shouldMerge(OrderDetails last,Order order){
         if(last==null) return false;
         return last.getUser().getNumber().trim().equals(order.getNumber().trim());

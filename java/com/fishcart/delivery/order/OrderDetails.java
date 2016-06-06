@@ -29,7 +29,7 @@ public class OrderDetails {
     /**
      * @param user the user to set
      */
-    public void setUser(User user) {
+   public void setUser(User user) {
         this.user = user;
     }
 

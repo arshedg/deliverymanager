@@ -7,10 +7,14 @@ package com.fishcart.delivery.service;
 
 import com.fishcart.delivery.dao.OrderDao;
 import com.fishcart.delivery.dao.OrderDetailsGenerator;
+import com.fishcart.delivery.order.Order;
 import com.fishcart.delivery.order.OrderDetails;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +44,16 @@ public class OrderControler {
         orderDao.setDeliverer(orderid, guy);
         return "saved";
     }
+    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public boolean saveOrder(@RequestBody Order order){
+        int response = orderDao.saveOrder(order);
+        if(response>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     
  
 }
