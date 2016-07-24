@@ -46,14 +46,21 @@ public class Util {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             return df.format(date);
     }
-     public static String getIndianTime(Timestamp time){
-        Date today = Date.from(time.toInstant());
-        //displaying this date on IST timezone
-        DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:SS z");
-        df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
-        return df.format(today);
+    public static String getIndianTime(Timestamp time){
+        Calendar cl = Calendar.getInstance();
+        cl.setTimeInMillis(time.getTime());
+        return cl.getTime().toString();
+   
 
     }
+//     public static String getIndianTime(Timestamp time){
+//        Date today = Date.from(time.toInstant());
+//        //displaying this date on IST timezone
+//        DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:SS z");
+//        df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+//        return df.format(today);
+//
+//    }
 
 
 }

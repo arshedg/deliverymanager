@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
 public class UserDao extends SimpleJdbcDaoSupport{
     public User getUserDetails(String number){
         Long lNumber = Long.valueOf(number);
-        String sql="select name,number,address,credit from user where number=?";
+        String sql="select name,number,address,credit,gps from user where number=?";
         List<User> users = this.getJdbcTemplate().query(sql,new Object[]{lNumber}, new RowMapper() {
 
             @Override
@@ -31,6 +31,7 @@ public class UserDao extends SimpleJdbcDaoSupport{
                 user.setNumber(rs.getString("number"));
                 user.setAddress(rs.getString("address"));
                 user.setCredit(rs.getFloat("credit"));
+                user.setLocation(rs.getString("gps"));
                 return user;
             }
         });
@@ -49,6 +50,11 @@ public class UserDao extends SimpleJdbcDaoSupport{
         this.getSimpleJdbcTemplate().update("update user set credit=? where number=?",credits,number);
         
     }
+      public void setCredit(String number,float amount){
+        this.getSimpleJdbcTemplate().update("update user set credit=? where number=?",amount,number);
+        
+    }
+     
     public float getCredits(String number){
         String query = "select max(credit) from user where number=?";
         long price = this.getSimpleJdbcTemplate().queryForLong(query, number);

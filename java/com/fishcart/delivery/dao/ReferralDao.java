@@ -29,7 +29,8 @@ public class ReferralDao extends SimpleJdbcDaoSupport {
     public void rewardReferrer(String user){
         String referred = getActiveReferrer(user);
         if(!"".equals(referred)){
-            userDao.addCredit(referred.toString(), 40);
+            userDao.addCredit(referred.toString(), 100);
+            userDao.addCredit(user, 50);
             setRewardedTrue(user);
         }
     }

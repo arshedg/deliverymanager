@@ -14,6 +14,7 @@ public class User {
     private String number;
     private String address;
     private Float credit;
+    private String location;
     /**
      * @return the name
      */
@@ -74,5 +75,19 @@ public class User {
      */
     public void setCredit(Float credit) {
         this.credit = credit;
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
