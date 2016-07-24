@@ -36,13 +36,16 @@
             </div>
         </div>
         <div data-role="page" id="details">
-            <div data-role="header" id="mainHeader" >
-                <a href="#" data-icon="gear" class="ui-btn-right" onclick="saveUserDetails()">Save</a>
+            <div data-role="header" id="mainHeader" style="padding:10px;" >
+                <a href="#" data-icon="gear" id="map" >MAP</a>
+                <a href="#" data-icon="gear"  onclick="saveUserDetails()">Save</a>
+         
             </div>  
             <div data-role="content" >
                 <input type='text' id='name'/>
                 <br/>
                 <a id="number"></a>
+              
                 <br/>
                 <textarea row="5" type='text' id='address'></textarea>
                 <br/>
