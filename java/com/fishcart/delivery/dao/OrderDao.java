@@ -36,7 +36,7 @@ public class OrderDao  extends SimpleJdbcDaoSupport{
     ReferralDao referralDao;
     public List<Order> getRecentOrders(){
         String date = get3DaysBack();
-        String sql = "select o.id, o.number,o.status,o.product, o.quantity,o.delivery_person ,o.immediate,o.stamp as time from orders o where DATE(stamp) >='"+date+"' order by time desc";
+        String sql = "select o.id, o.number,o.status,o.product, o.quantity,o.delivery_person ,o.immediate,o.slot,o.stamp as time from orders o where DATE(stamp) >='"+date+"' order by time desc";
         return this.getJdbcTemplate().query(sql,  OrderRowMapper.getInstance() );
     }
     public List<Order> getOrderHistory(String date){
@@ -207,6 +207,7 @@ class OrderRowMapper implements RowMapper{
                 Timestamp time = rs.getTimestamp("time");
                 order.setOrderedTime(Util.getIndianTime(time));
                 order.setImmediate(rs.getBoolean("immediate"));
+                order.setSlot(rs.getString("slot"));
                 order.setOrderStatus(OrderDao.getStatus(rs.getString("status")));
                 return order;
             }

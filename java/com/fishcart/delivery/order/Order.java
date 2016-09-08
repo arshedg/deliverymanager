@@ -21,6 +21,7 @@ public class Order implements Comparable{
     private boolean immediate;
     private String orderedTime;
     private String number;
+    private String slot;
     private String deliveryPerson;
     /**
      * @return the product
@@ -153,5 +154,19 @@ public class Order implements Comparable{
     public int compareTo(Object o) {
         Order other = (Order)o;
         return this.getOrderId()>other.getOrderId()?1:-1;
+    }
+
+    /**
+     * @return the slot
+     */
+    public String getSlot() {
+        return slot;
+    }
+
+    /**
+     * @param slot the slot to set
+     */
+    public void setSlot(String slot) {
+        this.slot = slot;
     }
 }
