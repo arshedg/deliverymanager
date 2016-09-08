@@ -317,13 +317,17 @@ function generateOrderTable(orderList) {
     $("#tbody").html(dom);
 
 }
+function getFormattedDate(date){
+    var parts = date.split(" ");
+    return parts[3]+ " "+parts[1]+"-"+parts[2]
+}
 function generateRow(order) {
     var timing = order.immediate == true ? "Immediate" : "booking";
     return "<tr>" +
             "<td> "+ order.product + "</td>" +
             "<td>" + order.quantity + "</td>" +
-            "<td>" + order.orderedTime + "</td>" +
-            "<td>" + timing + "</td>" +
+            "<td>" + getFormattedDate(order.orderedTime) + "</td>" +
+            "<td>" + order.slot + "</td>" +
             "<td>" + order.orderStatus + "</td>" +
             "<td><a href='#editOrder' onclick='generateEditOrder(" + order.orderId + ")'>edit</a></div></td>" +
             "<td><a src='#' onclick='cancelOrder(" + order.orderId + ")'>delete</a></div></td>" +

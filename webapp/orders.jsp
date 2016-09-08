@@ -108,7 +108,7 @@
                             <th>Product</th>
                             <th>Quantity</th>
                             <th>Time</th>
-                            <th>Expected delivery</th>
+                            <th>Slot</th>
                             <th>Status</th>
                             <th>Modify</th>
                             <th>cancel</th>
